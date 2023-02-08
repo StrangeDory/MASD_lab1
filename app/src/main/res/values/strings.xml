@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Notepad</string>
+    <string name="edit_title_hint">Название</string>
+</resources>
