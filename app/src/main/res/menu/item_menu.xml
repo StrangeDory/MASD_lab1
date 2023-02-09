@@ -3,6 +3,11 @@
 
 <item
     android:id="@+id/item_delete"
-    android:title="Delete"
+    android:title="@string/menu_item_delete"
+    android:icon="@mipmap/ic_trash"
     />
+    <item
+        android:id="@+id/item_share"
+        android:title="@string/menu_item_share"
+        />
 </menu>

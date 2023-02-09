@@ -57,6 +57,10 @@ class EditActivity : AppCompatActivity() {
                 finish()
             }
         }
+        if (!checkNotEmpty() && isEditState) {
+            dbManager.removeFromDB(id.toString())
+            finish()
+        }
     }
 
     fun onClickBackMain(view: View) {
