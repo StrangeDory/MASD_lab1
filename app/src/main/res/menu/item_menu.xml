@@ -10,4 +10,9 @@
         android:title="@string/menu_item_share"
         android:icon="@drawable/ic_baseline_share"
         />
+    <item
+        android:id="@+id/item_copy"
+        android:title="@string/menu_item_copy"
+        android:icon="@drawable/ic_baseline_content_copy_24"
+        />
 </menu>

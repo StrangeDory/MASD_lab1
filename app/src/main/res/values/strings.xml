@@ -3,4 +3,5 @@
     <string name="edit_title_hint">Название</string>
     <string name="menu_item_delete">Delete</string>
     <string name="menu_item_share">Share</string>
+    <string name="menu_item_copy">Copy</string>
 </resources>

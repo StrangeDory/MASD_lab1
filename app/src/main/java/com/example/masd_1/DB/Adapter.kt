@@ -1,12 +1,13 @@
 package com.example.masd_1.DB
 
-import android.content.Context
-import android.content.Intent
+import android.content.*
+import android.content.Context.CLIPBOARD_SERVICE
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.TextView
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import com.example.masd_1.EditActivity
 import com.example.masd_1.R
@@ -14,7 +15,6 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class Adapter(listMain : ArrayList<ListItem>, contextMain: Context) : RecyclerView.Adapter<Adapter.Holder>() {
@@ -79,6 +79,12 @@ class Adapter(listMain : ArrayList<ListItem>, contextMain: Context) : RecyclerVi
                 if (context?.packageManager?.resolveActivity(intent, 0) != null) {
                     context.startActivity(intent)
                 }
+            }
+            if (id == R.id.item_copy) {
+                val summary = listMainLocal[holder.layoutPosition].title + "\n\n" + holder.transformDate(listMainLocal[holder.layoutPosition].date) + "\n" +
+                        listMainLocal[holder.layoutPosition].content
+                var clipboardManager = context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                clipboardManager.setPrimaryClip(ClipData.newPlainText("", summary))
             }
             false
         }
