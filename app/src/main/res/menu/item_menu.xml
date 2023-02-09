@@ -4,10 +4,10 @@
 <item
     android:id="@+id/item_delete"
     android:title="@string/menu_item_delete"
-    android:icon="@mipmap/ic_trash"
-    />
+    android:icon="@drawable/ic_baseline_delete_outline_24" />
     <item
         android:id="@+id/item_share"
         android:title="@string/menu_item_share"
+        android:icon="@drawable/ic_baseline_share"
         />
 </menu>

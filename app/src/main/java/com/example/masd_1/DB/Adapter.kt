@@ -7,11 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.masd_1.EditActivity
 import com.example.masd_1.R
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -62,37 +60,57 @@ class Adapter(listMain : ArrayList<ListItem>, contextMain: Context) : RecyclerVi
         return Holder(inflater.inflate(R.layout.recycle_view_item, parent, false), context)
     }
 
+    fun popup(holder: Holder) {
+        val popupMenu = PopupMenu(context, holder.itemView)
+        popupMenu.menuInflater.inflate(R.menu.item_menu, popupMenu.menu)
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            val id = menuItem.itemId
+            if (id == R.id.item_delete) {
+                removeItem(holder.layoutPosition)
+            }
+            if (id == R.id.item_share) {
+                val summary = listMainLocal[holder.layoutPosition].title + "\n\n" + holder.transformDate(listMainLocal[holder.layoutPosition].date) + "\n" +
+                        listMainLocal[holder.layoutPosition].content
+                val intent = Intent(Intent.ACTION_SEND)
+                    .setType("text/plain")
+                    .putExtra(Intent.EXTRA_TEXT, summary)
+
+                // Check if there's an app that can handle this intent before launching it
+                if (context?.packageManager?.resolveActivity(intent, 0) != null) {
+                    context.startActivity(intent)
+                }
+            }
+            false
+        }
+        popupMenu.show()
+        val popup = PopupMenu::class.java.getDeclaredField("mPopup")
+        popup.isAccessible = true
+        val menu = popup.get(popupMenu)
+        menu.javaClass.getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+            .invoke(menu, true)
+    }
+
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.setData(listMainLocal[position])
         holder.itemView.setOnLongClickListener() {
-            val popupMenu = PopupMenu(context, holder.itemView)
-            popupMenu.menuInflater.inflate(R.menu.item_menu, popupMenu.menu)
-            popupMenu.setOnMenuItemClickListener { menuItem ->
-                val id = menuItem.itemId
-                if (id == R.id.item_delete) {
-                    removeItem(holder.layoutPosition)
-                }
-                if (id == R.id.item_share) {
-                    val summary = listMainLocal[holder.layoutPosition].title + "\n\n" + holder.transformDate(listMainLocal[holder.layoutPosition].date) + "\n" +
-                            listMainLocal[holder.layoutPosition].content
-                    val intent = Intent(Intent.ACTION_SEND)
-                        .setType("text/plain")
-                        .putExtra(Intent.EXTRA_TEXT, summary)
-
-                    // Check if there's an app that can handle this intent before launching it
-                    if (context?.packageManager?.resolveActivity(intent, 0) != null) {
-                        context.startActivity(intent)
-                    }
-                }
-                false
-            }
-            popupMenu.show()
+            popup(holder)
             false
         }
-    }
-
-    fun getStringItem() {
-
+        val textViewContent = holder.itemView.findViewById<TextView>(R.id.textViewContent)
+        val textViewTitle = holder.itemView.findViewById<TextView>(R.id.textViewTitle)
+        val textViewDate = holder.itemView.findViewById<TextView>(R.id.textViewDate)
+        textViewContent.setOnLongClickListener() {
+            popup(holder)
+            false
+        }
+        textViewTitle.setOnLongClickListener() {
+            popup(holder)
+            false
+        }
+        textViewDate.setOnLongClickListener() {
+            popup(holder)
+            false
+        }
     }
 
     override fun getItemCount(): Int {
