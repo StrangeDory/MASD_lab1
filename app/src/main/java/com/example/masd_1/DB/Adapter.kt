@@ -42,6 +42,30 @@ class Adapter(listMain : ArrayList<ListItem>, contextMain: Context) : RecyclerVi
                 }
                 context.startActivity(intent)
             }
+            textViewTitle.setOnClickListener() {
+                val intent = Intent(context, EditActivity::class.java).apply {
+                    putExtra(IntentConstants.INTENT_TITLE_KEY, item.title)
+                    putExtra(IntentConstants.INTENT_CONTENT_KEY, item.content)
+                    putExtra(IntentConstants.INTENT_ID_KEY, item.id)
+                }
+                context.startActivity(intent)
+            }
+            textViewContent.setOnClickListener() {
+                val intent = Intent(context, EditActivity::class.java).apply {
+                    putExtra(IntentConstants.INTENT_TITLE_KEY, item.title)
+                    putExtra(IntentConstants.INTENT_CONTENT_KEY, item.content)
+                    putExtra(IntentConstants.INTENT_ID_KEY, item.id)
+                }
+                context.startActivity(intent)
+            }
+            textViewDate.setOnClickListener() {
+                val intent = Intent(context, EditActivity::class.java).apply {
+                    putExtra(IntentConstants.INTENT_TITLE_KEY, item.title)
+                    putExtra(IntentConstants.INTENT_CONTENT_KEY, item.content)
+                    putExtra(IntentConstants.INTENT_ID_KEY, item.id)
+                }
+                context.startActivity(intent)
+            }
         }
 
         fun transformDate(dateText: String) : String {
