@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "826000087845",
+    "project_id": "notebook-b29be",
+    "storage_bucket": "notebook-b29be.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:826000087845:android:ed5aafbdfcac91d49258cc",
+        "android_client_info": {
+          "package_name": "com.example.masd_1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "826000087845-j8i8vgqqr6gud78uao7mk5srj2rhhd4p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8o5P8HVllX0Ertbq41CR0ulJJaJ0dU7g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "826000087845-j8i8vgqqr6gud78uao7mk5srj2rhhd4p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

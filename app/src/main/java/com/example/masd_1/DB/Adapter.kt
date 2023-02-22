@@ -39,6 +39,7 @@ class Adapter(listMain : ArrayList<ListItem>, contextMain: Context) : RecyclerVi
                     putExtra(IntentConstants.INTENT_TITLE_KEY, item.title)
                     putExtra(IntentConstants.INTENT_CONTENT_KEY, item.content)
                     putExtra(IntentConstants.INTENT_ID_KEY, item.id)
+                    putExtra(IntentConstants.INTENT_ID_FIREBASE_KEY, item.idFirebase)
                 }
                 context.startActivity(intent)
             }
@@ -47,6 +48,7 @@ class Adapter(listMain : ArrayList<ListItem>, contextMain: Context) : RecyclerVi
                     putExtra(IntentConstants.INTENT_TITLE_KEY, item.title)
                     putExtra(IntentConstants.INTENT_CONTENT_KEY, item.content)
                     putExtra(IntentConstants.INTENT_ID_KEY, item.id)
+                    putExtra(IntentConstants.INTENT_ID_FIREBASE_KEY, item.idFirebase)
                 }
                 context.startActivity(intent)
             }
@@ -55,6 +57,7 @@ class Adapter(listMain : ArrayList<ListItem>, contextMain: Context) : RecyclerVi
                     putExtra(IntentConstants.INTENT_TITLE_KEY, item.title)
                     putExtra(IntentConstants.INTENT_CONTENT_KEY, item.content)
                     putExtra(IntentConstants.INTENT_ID_KEY, item.id)
+                    putExtra(IntentConstants.INTENT_ID_FIREBASE_KEY, item.idFirebase)
                 }
                 context.startActivity(intent)
             }
@@ -63,6 +66,7 @@ class Adapter(listMain : ArrayList<ListItem>, contextMain: Context) : RecyclerVi
                     putExtra(IntentConstants.INTENT_TITLE_KEY, item.title)
                     putExtra(IntentConstants.INTENT_CONTENT_KEY, item.content)
                     putExtra(IntentConstants.INTENT_ID_KEY, item.id)
+                    putExtra(IntentConstants.INTENT_ID_FIREBASE_KEY, item.idFirebase)
                 }
                 context.startActivity(intent)
             }
@@ -72,7 +76,7 @@ class Adapter(listMain : ArrayList<ListItem>, contextMain: Context) : RecyclerVi
             val date = LocalDateTime.parse(dateText)
             val dateNow = LocalDateTime.now()
             return if (date.year == dateNow.year && date.month == dateNow.month && date.dayOfMonth == dateNow.dayOfMonth) {
-                date.format(DateTimeFormatter.ofPattern("kk:mm", Locale.ROOT)).toString()
+                date.format(DateTimeFormatter.ofPattern("HH:mm", Locale.ROOT)).toString()
             } else {
                 date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)).toString()
             }
@@ -156,7 +160,7 @@ class Adapter(listMain : ArrayList<ListItem>, contextMain: Context) : RecyclerVi
     fun removeItem(pos: Int) {
         val dbManager = DBManager(context)
         dbManager.openDB()
-        dbManager.removeFromDB(listMainLocal[pos].id.toString())
+        dbManager.removeFromDB(listMainLocal[pos].id.toString(), listMainLocal[pos].idFirebase)
         dbManager.closeDB()
         listMainLocal.removeAt(pos)
         notifyItemRangeChanged(0, listMainLocal.size)

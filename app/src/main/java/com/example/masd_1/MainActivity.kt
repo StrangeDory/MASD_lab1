@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.masd_1.DB.Adapter
+import com.example.masd_1.DB.DAOListItem
 import com.example.masd_1.DB.DBManager
 import com.example.masd_1.DB.ListItem
 import kotlinx.coroutines.CoroutineScope
@@ -70,6 +71,9 @@ class MainActivity : AppCompatActivity() {
         job?.cancel()
         job = CoroutineScope(Dispatchers.Main).launch {
             val list = dbManager.readDBData(text)
+            val dao = DAOListItem()
+            for(item in list)
+                dao.setValue(item.idFirebase, item)
             adapter.updateAdapter(list)
             checkTextNoElements(list)
         }

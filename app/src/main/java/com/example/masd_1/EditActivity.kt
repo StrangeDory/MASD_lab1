@@ -16,7 +16,8 @@ import java.util.*
 class EditActivity : AppCompatActivity() {
 
     val dbManager = DBManager(this)
-    var id = 0
+    var id: Long = 0
+    var idFirebase = ""
     var isEditState = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,14 +52,14 @@ class EditActivity : AppCompatActivity() {
             val date = getCurrentDateTime()
             CoroutineScope(Dispatchers.Main).launch {
                 if (isEditState)
-                    dbManager.updateDB(title, content, date, id)
+                    dbManager.updateDB(title, content, date, id, idFirebase)
                 else
                     dbManager.insertToDB(title, content, date)
                 finish()
             }
         }
         if (!checkNotEmpty() && isEditState) {
-            dbManager.removeFromDB(id.toString())
+            dbManager.removeFromDB(id.toString(), idFirebase)
             finish()
         }
     }
@@ -89,7 +90,9 @@ class EditActivity : AppCompatActivity() {
                     editTextTitleTable.setText(i.getStringExtra(IntentConstants.INTENT_TITLE_KEY))
                 if (i.getStringExtra(IntentConstants.INTENT_CONTENT_KEY) != null)
                     editTextContentTable.setText(i.getStringExtra(IntentConstants.INTENT_CONTENT_KEY))
-                id = i.getIntExtra(IntentConstants.INTENT_ID_KEY, 0)
+                id = i.getIntExtra(IntentConstants.INTENT_ID_KEY,0 ).toLong()
+                if (i.getStringExtra(IntentConstants.INTENT_ID_FIREBASE_KEY) != null)
+                    idFirebase = i.getStringExtra(IntentConstants.INTENT_ID_FIREBASE_KEY)!!
                 isEditState = true
             }
         }

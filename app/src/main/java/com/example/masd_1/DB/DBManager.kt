@@ -4,30 +4,36 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
-import com.example.masd_1.MainActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class DBManager(context: Context) {
     val dbFunctions = DBFunctions(context)
     var db: SQLiteDatabase? = null
+    var dao = DAOListItem()
 
     fun openDB() {
         db = dbFunctions.writableDatabase
     }
 
     suspend fun insertToDB(title: String, content: String, date: String) = withContext(Dispatchers.IO) {
+        val idFirebase = dao.add()
         val values = ContentValues().apply {
             put(DBNameClass.COLUMN_NAME_TITLE, title)
             put(DBNameClass.COLUMN_NAME_CONTENT, content)
             put(DBNameClass.COLUMN_NAME_DATE, date)
+            put(DBNameClass.COLUMN_NAME_IDFIREBASE, idFirebase)
         }
-        db?.insert(DBNameClass.TABLE_NAME, null, values)
+        val id = db?.insert(DBNameClass.TABLE_NAME, null, values)
+        val item = ListItem(title, content, date, id!!, idFirebase)
+        dao.setValue(idFirebase, item)
     }
 
-    fun removeFromDB(id: String) {
+    fun removeFromDB(id: String, idFirebase: String) {
         val selection = BaseColumns._ID + "=$id"
         db?.delete(DBNameClass.TABLE_NAME, selection, null)
+        if (!idFirebase.isNullOrEmpty())
+            dao.remove(idFirebase)
     }
 
     suspend fun readDBData(searchText: String) : ArrayList<ListItem> = withContext(Dispatchers.IO) {
@@ -38,19 +44,21 @@ class DBManager(context: Context) {
             val dataTitle = cursor.getString(cursor.getColumnIndexOrThrow(DBNameClass.COLUMN_NAME_TITLE))
             val dataContent = cursor.getString(cursor.getColumnIndexOrThrow(DBNameClass.COLUMN_NAME_CONTENT))
             val dataDate = cursor.getString(cursor.getColumnIndexOrThrow(DBNameClass.COLUMN_NAME_DATE))
-            val dataId = cursor.getInt(cursor.getColumnIndexOrThrow(BaseColumns._ID))
+            val dataId = cursor.getLong(cursor.getColumnIndexOrThrow(BaseColumns._ID))
+            val dataIdFirebase = cursor.getString(cursor.getColumnIndexOrThrow(DBNameClass.COLUMN_NAME_IDFIREBASE))
             val item = ListItem()
             item.title = dataTitle
             item.content = dataContent
             item.date = dataDate
             item.id = dataId
+            item.idFirebase = dataIdFirebase
             dataList.add(item)
         }
         cursor.close()
         return@withContext dataList
     }
 
-    suspend fun updateDB(title: String, content: String, date: String, id: Int) = withContext(Dispatchers.IO) {
+    suspend fun updateDB(title: String, content: String, date: String, id: Long, idFirebase: String) = withContext(Dispatchers.IO) {
         val values = ContentValues().apply {
             put(DBNameClass.COLUMN_NAME_TITLE, title)
             put(DBNameClass.COLUMN_NAME_CONTENT, content)
@@ -58,6 +66,9 @@ class DBManager(context: Context) {
         }
         val selection = BaseColumns._ID + "=$id"
         db?.update(DBNameClass.TABLE_NAME, values, selection, null)
+        val item = ListItem(title, content, date, id, idFirebase)
+        if (!idFirebase.isNullOrEmpty())
+            dao.setValue(idFirebase, item)
     }
 
     fun deleteDB() {
