@@ -16,7 +16,7 @@ import java.util.*
 class EditActivity : AppCompatActivity() {
 
     val dbManager = DBManager(this)
-    var id: Long = 0
+    var id: Int = 0
     var idFirebase = ""
     var isEditState = false
 
@@ -55,11 +55,13 @@ class EditActivity : AppCompatActivity() {
                     dbManager.updateDB(title, content, date, id, idFirebase)
                 else
                     dbManager.insertToDB(title, content, date)
+                isEditState = false
                 finish()
             }
         }
         if (!checkNotEmpty() && isEditState) {
             dbManager.removeFromDB(id.toString(), idFirebase)
+            isEditState = false
             finish()
         }
     }
@@ -90,7 +92,7 @@ class EditActivity : AppCompatActivity() {
                     editTextTitleTable.setText(i.getStringExtra(IntentConstants.INTENT_TITLE_KEY))
                 if (i.getStringExtra(IntentConstants.INTENT_CONTENT_KEY) != null)
                     editTextContentTable.setText(i.getStringExtra(IntentConstants.INTENT_CONTENT_KEY))
-                id = i.getIntExtra(IntentConstants.INTENT_ID_KEY,0 ).toLong()
+                id = i.getIntExtra(IntentConstants.INTENT_ID_KEY,0 )
                 if (i.getStringExtra(IntentConstants.INTENT_ID_FIREBASE_KEY) != null)
                     idFirebase = i.getStringExtra(IntentConstants.INTENT_ID_FIREBASE_KEY)!!
                 isEditState = true

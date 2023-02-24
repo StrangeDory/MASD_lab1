@@ -25,15 +25,14 @@ class DBManager(context: Context) {
             put(DBNameClass.COLUMN_NAME_IDFIREBASE, idFirebase)
         }
         val id = db?.insert(DBNameClass.TABLE_NAME, null, values)
-        val item = ListItem(title, content, date, id!!, idFirebase)
+        val item = ListItem(title, content, date, id!!.toInt(), idFirebase)
         dao.setValue(idFirebase, item)
     }
 
     fun removeFromDB(id: String, idFirebase: String) {
         val selection = BaseColumns._ID + "=$id"
         db?.delete(DBNameClass.TABLE_NAME, selection, null)
-        if (!idFirebase.isNullOrEmpty())
-            dao.remove(idFirebase)
+        dao.remove(idFirebase)
     }
 
     suspend fun readDBData(searchText: String) : ArrayList<ListItem> = withContext(Dispatchers.IO) {
@@ -44,7 +43,7 @@ class DBManager(context: Context) {
             val dataTitle = cursor.getString(cursor.getColumnIndexOrThrow(DBNameClass.COLUMN_NAME_TITLE))
             val dataContent = cursor.getString(cursor.getColumnIndexOrThrow(DBNameClass.COLUMN_NAME_CONTENT))
             val dataDate = cursor.getString(cursor.getColumnIndexOrThrow(DBNameClass.COLUMN_NAME_DATE))
-            val dataId = cursor.getLong(cursor.getColumnIndexOrThrow(BaseColumns._ID))
+            val dataId = cursor.getInt(cursor.getColumnIndexOrThrow(BaseColumns._ID))
             val dataIdFirebase = cursor.getString(cursor.getColumnIndexOrThrow(DBNameClass.COLUMN_NAME_IDFIREBASE))
             val item = ListItem()
             item.title = dataTitle
@@ -58,17 +57,17 @@ class DBManager(context: Context) {
         return@withContext dataList
     }
 
-    suspend fun updateDB(title: String, content: String, date: String, id: Long, idFirebase: String) = withContext(Dispatchers.IO) {
+    suspend fun updateDB(title: String, content: String, date: String, id: Int, idFirebase: String) = withContext(Dispatchers.IO) {
         val values = ContentValues().apply {
             put(DBNameClass.COLUMN_NAME_TITLE, title)
             put(DBNameClass.COLUMN_NAME_CONTENT, content)
             put(DBNameClass.COLUMN_NAME_DATE, date)
+            put(DBNameClass.COLUMN_NAME_IDFIREBASE, idFirebase)
         }
         val selection = BaseColumns._ID + "=$id"
         db?.update(DBNameClass.TABLE_NAME, values, selection, null)
         val item = ListItem(title, content, date, id, idFirebase)
-        if (!idFirebase.isNullOrEmpty())
-            dao.setValue(idFirebase, item)
+        dao.setValue(idFirebase, item)
     }
 
     fun deleteDB() {

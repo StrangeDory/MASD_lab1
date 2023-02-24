@@ -10,14 +10,14 @@ class ListItem {
     var date: String = ""
         get() = field
         set(value) { field = value}
-    var id: Long = 1
+    var id: Int = 1
         get() = field
         set(value) { field = value}
     var idFirebase: String = ""
         get() = field
         set(value) { field = value}
 
-    constructor(title: String, content: String, date: String, id: Long, idFirebase: String) {
+    constructor(title: String, content: String, date: String, id: Int, idFirebase: String) {
         this.title = title
         this.content = content
         this.date = date
